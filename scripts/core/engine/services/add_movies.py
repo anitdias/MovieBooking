@@ -7,8 +7,9 @@ from pydantic import BaseModel
 
 from scripts.constants.app_constanst import Constants
 from scripts.logging.logger import logger
+from scripts.utils.mongoutils import db
 
-movie_collection = Constants.movie_collection
+movie_collection = db["movie_collection"]
 add_movie_router = APIRouter()
 
 jwt_key = os.getenv('SECRET_KEY')

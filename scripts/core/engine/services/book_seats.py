@@ -6,8 +6,9 @@ from pydantic import BaseModel
 from scripts.constants.app_constanst import Constants
 
 from scripts.logging.logger import logger
+from scripts.utils.mongoutils import db
 
-movie_collection = Constants.movie_collection
+movie_collection = db["movie_collection"]
 seat_booking_router = APIRouter()
 
 
