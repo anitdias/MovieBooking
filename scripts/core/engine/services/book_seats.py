@@ -1,5 +1,6 @@
 from typing import List
-
+import os
+import jwt
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -8,7 +9,11 @@ from scripts.constants.app_constanst import Constants
 from scripts.logging.logger import logger
 from scripts.utils.mongoutils import db
 
+jwt_key = os.getenv('SECRET_KEY')
+algorithm = os.getenv('ALGORITHM')
 movie_collection = db["movie_collection"]
+user_booking_collection = db["user_booking_collection"]
+
 seat_booking_router = APIRouter()
 
 
@@ -18,7 +23,9 @@ class BookSeat(BaseModel):
 
 
 @seat_booking_router.post('/book')
-def book_seats(seat: BookSeat):
+def book_seats(seat: BookSeat, token: str):
+    decoded_token = jwt.decode(token, jwt_key, algorithms=[algorithm])
+    username = decoded_token.get('user')
     booking_failed = False
     booking_request = []
     if movie_collection.find_one({"name": seat.name}):
@@ -39,4 +46,6 @@ def book_seats(seat: BookSeat):
                 seat_lst.append(i)
 
         movie_collection.update_one({"name": seat.name}, {"$set": {'seats': seat_lst}})
+        user_booking_collection.insert_one(
+            {'username': username, 'movie_name': movie_details['name'], 'seat': lst})
         logger.info("Booked seats")
