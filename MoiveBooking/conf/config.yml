@@ -1,4 +1,0 @@
-mongodb:
-  uri: mongodb://localhost:27017/
-  database: movie_booking
-  user_collection: user_collection
