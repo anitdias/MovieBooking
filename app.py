@@ -1,5 +1,7 @@
-import uvicorn
 import os
+
+import uvicorn
+
 from scripts.logging.logger import logger
 
 if __name__ == "__main__":

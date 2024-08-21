@@ -1,25 +1,19 @@
-from typing import List
 import os
+
 import jwt
 from fastapi import APIRouter
-from pydantic import BaseModel
 
 from scripts.constants.app_constanst import Constants
-
 from scripts.logging.logger import logger
-from scripts.utils.mongoutils import db
+from scripts.utils.mongo_utils import db
+from scripts.schema.movie_schemas import BookSeat
 
 jwt_key = os.getenv('SECRET_KEY')
 algorithm = os.getenv('ALGORITHM')
-movie_collection = db["movie_collection"]
-user_booking_collection = db["user_booking_collection"]
+movie_collection = db[Constants.movie_collection]
+user_booking_collection = db[Constants.user_booking_collection]
 
 seat_booking_router = APIRouter()
-
-
-class BookSeat(BaseModel):
-    name: str
-    seat_no: List[int]
 
 
 @seat_booking_router.post('/book')

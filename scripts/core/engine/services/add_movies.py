@@ -1,26 +1,17 @@
 import os
-from typing import List
 
 import jwt
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 
-from scripts.constants.app_constanst import Constants
 from scripts.logging.logger import logger
-from scripts.utils.mongoutils import db
+from scripts.utils.mongo_utils import db
+from scripts.schema.movie_schemas import MovieDetails
 
 movie_collection = db["movie_collection"]
 add_movie_router = APIRouter()
 
 jwt_key = os.getenv('SECRET_KEY')
 algorithm = os.getenv('ALGORITHM')
-
-
-class MovieDetails(BaseModel):
-    name: str
-    date: str
-    time: str
-    seats: List[str] = []
 
 
 @add_movie_router.post('/addMovie')
